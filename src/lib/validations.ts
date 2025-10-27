@@ -4,7 +4,7 @@ import { ClassLevel } from '@/types'
 export const studentSchema = z.object({
   rollNumber: z.string().min(1, 'Roll number is required').max(20, 'Roll number too long'),
   name: z.string().min(1, 'Name is required').max(100, 'Name too long'),
-  className: z.nativeEnum(ClassLevel, { errorMap: () => ({ message: 'Invalid class level' }) }),
+className: z.nativeEnum(ClassLevel, { message: 'Please select a valid class level' }),
   phoneNumber: z.string().min(10, 'Phone number must be at least 10 digits').max(15, 'Phone number too long')
 })
 

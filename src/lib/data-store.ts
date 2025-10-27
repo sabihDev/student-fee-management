@@ -35,12 +35,12 @@ export const studentStore = {
     
     if (filters?.sortBy) {
       result.sort((a, b) => {
-        const aVal = a[filters.sortBy as keyof Student]
-        const bVal = b[filters.sortBy as keyof Student]
+        const aVal: string | Date | FeeRecord[] | undefined = a[filters.sortBy as keyof Student]
+        const bVal: string | Date | FeeRecord[] | undefined = b[filters.sortBy as keyof Student]
         const order = filters.sortOrder === 'desc' ? -1 : 1
-        
-        if (aVal < bVal) return -1 * order
-        if (aVal > bVal) return 1 * order
+
+        if (aVal !== undefined && bVal !== undefined && aVal < bVal) return -1 * order
+        if (aVal !== undefined && bVal !== undefined && aVal > bVal) return 1 * order
         return 0
       })
     }
