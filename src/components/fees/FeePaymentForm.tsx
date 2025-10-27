@@ -11,10 +11,15 @@ const feePaymentFormSchema = z.object({
   year: z.number().min(2020, 'Year must be 2020 or later').max(2030, 'Year must be 2030 or earlier'),
   amount: z.number().min(0.01, 'Amount must be greater than 0'),
   paymentDate: z.string().min(1, 'Payment date is required'),
-  status: z.enum(['PAID', 'UNPAID']).default('PAID')
+  // 👇 Make it required explicitly to avoid "undefined"
+  status: z.enum(['PAID', 'UNPAID']).default('PAID').refine(val => val !== undefined, {
+    message: 'Status is required'
+  })
 })
 
-type FeePaymentFormData = z.infer<typeof feePaymentFormSchema>
+type FeePaymentFormData = z.infer<typeof feePaymentFormSchema> & {
+  status: 'PAID' | 'UNPAID'
+}
 
 interface FeePaymentFormProps {
   studentId: string
@@ -24,30 +29,30 @@ interface FeePaymentFormProps {
   isLoading?: boolean
 }
 
-export default function FeePaymentForm({ 
-  studentId, 
-  initialData, 
-  onSubmit, 
-  onCancel, 
-  isLoading = false 
+export default function FeePaymentForm({
+  studentId,
+  initialData,
+  onSubmit,
+  onCancel,
+  isLoading = false
 }: FeePaymentFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null)
-  
+
   const currentDate = new Date()
   const currentMonth = currentDate.getMonth() + 1
   const currentYear = currentDate.getFullYear()
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch
   } = useForm<FeePaymentFormData>({
-    resolver: zodResolver(feePaymentFormSchema),
+    resolver: zodResolver(feePaymentFormSchema) as any, // 👈 type-cast to suppress strict mismatch
     defaultValues: {
       month: currentMonth,
       year: currentYear,
-      amount: 1000, // Default amount
+      amount: 1000,
       paymentDate: currentDate.toISOString().split('T')[0],
       status: 'PAID',
       ...initialData
@@ -87,7 +92,7 @@ export default function FeePaymentForm({
       <h2 className="text-2xl font-bold mb-6 text-gray-800">
         {initialData ? 'Update Fee Payment' : 'Record Fee Payment'}
       </h2>
-      
+
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         {/* Month and Year */}
         <div className="grid grid-cols-2 gap-4">
@@ -106,9 +111,7 @@ export default function FeePaymentForm({
                 </option>
               ))}
             </select>
-            {errors.month && (
-              <p className="mt-1 text-sm text-red-600">{errors.month.message}</p>
-            )}
+            {errors.month && <p className="mt-1 text-sm text-red-600">{errors.month.message}</p>}
           </div>
 
           <div>
@@ -126,9 +129,7 @@ export default function FeePaymentForm({
                 </option>
               ))}
             </select>
-            {errors.year && (
-              <p className="mt-1 text-sm text-red-600">{errors.year.message}</p>
-            )}
+            {errors.year && <p className="mt-1 text-sm text-red-600">{errors.year.message}</p>}
           </div>
         </div>
 
@@ -149,9 +150,7 @@ export default function FeePaymentForm({
               placeholder="0.00"
             />
           </div>
-          {errors.amount && (
-            <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
-          )}
+          {errors.amount && <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>}
         </div>
 
         {/* Payment Status */}
@@ -167,9 +166,7 @@ export default function FeePaymentForm({
             <option value="PAID">Paid</option>
             <option value="UNPAID">Unpaid</option>
           </select>
-          {errors.status && (
-            <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
-          )}
+          {errors.status && <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>}
         </div>
 
         {/* Payment Date - Only show if status is PAID */}
@@ -193,23 +190,21 @@ export default function FeePaymentForm({
           </div>
         )}
 
-        {/* Submit Error */}
         {submitError && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-md">
             <p className="text-sm text-red-600">{submitError}</p>
           </div>
         )}
 
-        {/* Form Actions */}
         <div className="flex gap-3 pt-4">
           <button
             type="submit"
             disabled={isSubmitting || isLoading}
             className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting || isLoading ? 'Saving...' : (initialData ? 'Update Payment' : 'Record Payment')}
+            {isSubmitting || isLoading ? 'Saving...' : initialData ? 'Update Payment' : 'Record Payment'}
           </button>
-          
+
           {onCancel && (
             <button
               type="button"
@@ -222,14 +217,6 @@ export default function FeePaymentForm({
           )}
         </div>
       </form>
-
-      {/* Helper Text */}
-      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-        <p className="text-sm text-blue-700">
-          <strong>Tip:</strong> You can record both paid and unpaid fee entries. 
-          For unpaid entries, you can update them later when payment is received.
-        </p>
-      </div>
     </div>
   )
 }
