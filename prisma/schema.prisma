@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id          String      @id @default(uuid())
+  rollNumber  String      @unique
+  firstName   String
+  lastName    String
+  email       String      @unique
+  phoneNumber String?
+  classId     String
+  class       Class       @relation(fields: [classId], references: [id])
+  feeRecords  FeeRecord[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([classId])
+}
+
+model Class {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  students  Student[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model FeeRecord {
+  id          String     @id @default(uuid())
+  studentId   String
+  month       Int
+  year        Int
+  amount      Float
+  dueDate     DateTime
+  paymentDate DateTime?
+  status      FeeStatus  @default(PENDING)
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  @@unique([studentId, month, year])
+  @@index([studentId])
+  @@index([status])
+}
+
+enum FeeStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
