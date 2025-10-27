@@ -49,7 +49,7 @@ export interface FeeRecord {
   month: number // 1-12
   year: number
   amount: number
-  paymentDate: Date | null
+  paymentDate?: Date | null | undefined
   status: 'PAID' | 'UNPAID'
   createdAt: Date
   updatedAt: Date
