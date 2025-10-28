@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { studentSchema, queryParamsSchema } from '@/lib/validations'
 import { studentStore } from '@/lib/data-store'
 import { ClassLevel } from '@/types'
-import { ZodError } from 'zod'
 
 // GET /api/students - Retrieve students with filtering/sorting
 export async function GET(request: NextRequest) {
@@ -27,30 +26,13 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     )
   } catch (error) {
-    console.error('Error fetching students:', error)
-
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Invalid query parameters',
-            details: error,
-          },
-        },
-        { status: 400 }
-      )
-    }
+    console.error('Error fetching dashboard stats:', {
+      message: (error as Error).message,
+      stack: (error as Error).stack,
+    })
 
     return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'FETCH_ERROR',
-          message: 'Failed to fetch students',
-        },
-      },
+      { error: 'Failed to fetch dashboard statistics' },
       { status: 500 }
     )
   }
@@ -87,30 +69,13 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('Error creating student:', error)
-
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Invalid student data',
-            details: error,
-          },
-        },
-        { status: 400 }
-      )
-    }
+    console.error('Error fetching dashboard stats:', {
+      message: (error as Error).message,
+      stack: (error as Error).stack,
+    })
 
     return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'CREATE_ERROR',
-          message: 'Failed to create student',
-        },
-      },
+      { error: 'Failed to fetch dashboard statistics' },
       { status: 500 }
     )
   }
