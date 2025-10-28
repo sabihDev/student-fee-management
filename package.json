@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "postinstall": "npx prisma generate",
+    "postinstall": "npx prisma generate && npx prisma db push",
     "lint": "eslint"
   },
   "dependencies": {
