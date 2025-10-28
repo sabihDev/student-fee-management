@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import ClassOverview from '@/components/classes/ClassOverview'
 import { ClassLevel } from '@/types'
+import 'dotenv/config'
 
 interface DashboardStats {
   totalStudents: number
