@@ -13,6 +13,8 @@ export default function StudentsPage() {
     const [viewMode, setViewMode] = useState<ViewMode>('list')
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
     const [refreshKey, setRefreshKey] = useState(0)
+    console.log('Connected to:', process.env.DATABASE_URL)
+
 
     const handleAddStudent = async (data: any) => {
         try {

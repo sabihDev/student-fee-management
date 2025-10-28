@@ -19,6 +19,8 @@ export default function Home() {
     currentMonthPayments: 0,
     pendingPayments: 0
   })
+  console.log('Connected to:', process.env.DATABASE_URL)
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
