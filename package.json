@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@tailwindcss/postcss": "^4.1.16",
     "@prisma/client": "^6.18.0",
     "autoprefixer": "^10.4.21",
     "lucide-react": "^0.548.0",
@@ -25,7 +26,6 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.16",
     "@types/pg": "^8.15.5",
