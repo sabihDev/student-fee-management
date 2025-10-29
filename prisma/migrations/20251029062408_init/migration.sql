@@ -2,16 +2,6 @@
 CREATE TYPE "FeeStatus" AS ENUM ('PENDING', 'PAID', 'OVERDUE', 'CANCELLED');
 
 -- CreateTable
-CREATE TABLE "Class" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Class_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Student" (
     "id" TEXT NOT NULL,
     "rollNumber" TEXT NOT NULL,
@@ -24,6 +14,16 @@ CREATE TABLE "Student" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Class" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Class_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -44,9 +44,6 @@ CREATE TABLE "FeeRecord" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Class_name_key" ON "Class"("name");
-
--- CreateIndex
 CREATE UNIQUE INDEX "Student_rollNumber_key" ON "Student"("rollNumber");
 
 -- CreateIndex
@@ -56,13 +53,16 @@ CREATE UNIQUE INDEX "Student_email_key" ON "Student"("email");
 CREATE INDEX "Student_classId_idx" ON "Student"("classId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "FeeRecord_studentId_month_year_key" ON "FeeRecord"("studentId", "month", "year");
+CREATE UNIQUE INDEX "Class_name_key" ON "Class"("name");
 
 -- CreateIndex
 CREATE INDEX "FeeRecord_studentId_idx" ON "FeeRecord"("studentId");
 
 -- CreateIndex
 CREATE INDEX "FeeRecord_status_idx" ON "FeeRecord"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "FeeRecord_studentId_month_year_key" ON "FeeRecord"("studentId", "month", "year");
 
 -- AddForeignKey
 ALTER TABLE "Student" ADD CONSTRAINT "Student_classId_fkey" FOREIGN KEY ("classId") REFERENCES "Class"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

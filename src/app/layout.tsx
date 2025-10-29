@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Navigation from "@/components/ui/Navigation";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import SkipLink from "@/components/ui/SkipLink";
+import { AppStateProvider } from "@/context/AppStateProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,12 +34,14 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <SkipLink />
-          <div className="min-h-screen bg-gray-50">
-            <Navigation />
-            <main id="main-content" role="main">
-              {children}
-            </main>
-          </div>
+          <AppStateProvider>
+            <div className="min-h-screen bg-gray-50">
+              <Navigation />
+              <main id="main-content" role="main">
+                {children}
+              </main>
+            </div>
+          </AppStateProvider>
         </ErrorBoundary>
       </body>
     </html>

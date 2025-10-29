@@ -2,6 +2,9 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+// Ensure this route is always computed on request and not statically cached
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const now = new Date()
@@ -32,9 +35,11 @@ export async function GET() {
     })
   } catch (error) {
     console.error('Error fetching dashboard stats:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch dashboard statistics' },
-      { status: 500 }
-    )
+    // Return safe defaults to avoid client crashes
+    return NextResponse.json({
+      totalStudents: 0,
+      currentMonthPayments: 0,
+      pendingPayments: 0,
+    })
   }
 }

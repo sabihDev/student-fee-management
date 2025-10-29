@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useAppState } from '@/context/AppStateProvider'
 import ClassOverview from '@/components/classes/ClassOverview'
 import { ClassLevel } from '@/types'
 import 'dotenv/config'
@@ -15,6 +16,7 @@ interface DashboardStats {
 
 export default function Home() {
   const router = useRouter()
+  const { dashboard, dashboardStatus, fetchDashboard } = useAppState()
   const [stats] = useState<DashboardStats>({
     totalStudents: 0,
     currentMonthPayments: 0,
@@ -25,18 +27,8 @@ export default function Home() {
   const [loading] = useState(true)
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/dashboard/stats')
-        if (!response.ok) throw new Error('Failed to fetch stats')
-        const data = await response.json()
-        // setStats(data) // Commented out since stats is not used
-      } catch (error) {
-        console.error('Error fetching dashboard stats:', error)
-      }
-    }
-    fetchStats()
-  }, [])
+    fetchDashboard()
+  }, [fetchDashboard])
 
   const handleClassSelect = (className: ClassLevel) => {
     router.push(`/classes/${encodeURIComponent(className)}`)
@@ -50,6 +42,22 @@ export default function Home() {
           <p className="text-lg text-gray-600">
             Manage student information and track monthly fee payments
           </p>
+        </div>
+
+        {/* Simple dashboard stats preview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600">Total Students</p>
+            <p className="text-2xl font-bold text-blue-600">{dashboard?.totalStudents ?? 0}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600">Payments (This Month)</p>
+            <p className="text-2xl font-bold text-green-600">{dashboard?.currentMonthPayments ?? 0}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p className="text-sm text-gray-600">Pending</p>
+            <p className="text-2xl font-bold text-red-600">{dashboard?.pendingPayments ?? 0}</p>
+          </div>
         </div>
 
 
