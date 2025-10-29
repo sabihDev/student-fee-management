@@ -1,24 +1,24 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model Student {
   id          String      @id @default(uuid())
   rollNumber  String      @unique
-  name   String
   phoneNumber String?
   classId     String
-  class       Class       @relation(fields: [classId], references: [id])
-  feeRecords  FeeRecord[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  name        String
+  feeRecords  FeeRecord[]
+  class       Class       @relation(fields: [classId], references: [id])
 
   @@index([classId])
 }
@@ -26,25 +26,25 @@ model Student {
 model Class {
   id        String    @id @default(uuid())
   name      String    @unique
-  students  Student[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  students  Student[]
 }
 
 model FeeRecord {
-  id          String     @id @default(uuid())
+  id          String    @id @default(uuid())
   studentId   String
   month       Int
   year        Int
   amount      Float
   dueDate     DateTime
   paymentDate DateTime?
-  status      FeeStatus  @default(PENDING)
+  status      FeeStatus @default(PENDING)
   description String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  student     Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
   @@unique([studentId, month, year])
   @@index([studentId])
   @@index([status])
