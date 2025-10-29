@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { useAppState } from '@/context/AppStateProvider'
 import ClassOverview from '@/components/classes/ClassOverview'
 import { ClassLevel } from '@/types'
-import 'dotenv/config'
 
 interface DashboardStats {
   totalStudents: number
@@ -22,7 +21,7 @@ export default function Home() {
     currentMonthPayments: 0,
     pendingPayments: 0
   })
-  console.log('Connected to:', process.env.DATABASE_URL)
+  console.log('Connected to:', process.env.POSTGRES_URL ?? 'No database URL found')
 
   const [loading] = useState(true)
 
