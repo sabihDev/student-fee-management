@@ -11,15 +11,10 @@ const feePaymentFormSchema = z.object({
   year: z.number().min(2020, 'Year must be 2020 or later').max(2030, 'Year must be 2030 or earlier'),
   amount: z.number().min(0.01, 'Amount must be greater than 0'),
   paymentDate: z.string().min(1, 'Payment date is required'),
-  // 👇 Make it required explicitly to avoid "undefined"
-  status: z.enum(['PAID', 'UNPAID']).default('PAID').refine(val => val !== undefined, {
-    message: 'Status is required'
-  })
+  status: z.enum(['PAID', 'UNPAID'])
 })
 
-type FeePaymentFormData = z.infer<typeof feePaymentFormSchema> & {
-  status: 'PAID' | 'UNPAID'
-}
+type FeePaymentFormData = z.infer<typeof feePaymentFormSchema>
 
 interface FeePaymentFormProps {
   studentId: string
@@ -48,7 +43,7 @@ export default function FeePaymentForm({
     formState: { errors, isSubmitting },
     watch
   } = useForm<FeePaymentFormData>({
-    resolver: zodResolver(feePaymentFormSchema) as any, // 👈 type-cast to suppress strict mismatch
+    resolver: zodResolver(feePaymentFormSchema),
     defaultValues: {
       month: currentMonth,
       year: currentYear,
@@ -80,8 +75,9 @@ export default function FeePaymentForm({
     try {
       setSubmitError(null)
       await onSubmit(data)
-    } catch (error: any) {
-      setSubmitError(error.message || 'An error occurred while recording the payment')
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred while recording the payment'
+      setSubmitError(errorMessage)
     }
   }
 

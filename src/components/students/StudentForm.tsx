@@ -34,8 +34,9 @@ export default function StudentForm({
     try {
       setSubmitError(null)
       await onSubmit(data)
-    } catch (error: any) {
-      setSubmitError(error.message || 'An error occurred while saving the student')
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred while saving the student'
+      setSubmitError(errorMessage)
     }
   }
 

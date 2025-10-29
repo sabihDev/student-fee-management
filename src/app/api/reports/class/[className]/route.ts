@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { studentStore, feeStore } from '@/lib/data-store'
-import { ClassLevel } from '@/types'
+import { ClassLevel, Student, FeeRecord } from '@/types'
 
 // GET /api/reports/class/[className] - Generate class report
 export async function GET(
@@ -47,7 +47,7 @@ export async function GET(
     }
     
     // If month and year are provided, get fee records for that period
-    let feeRecords: any[] = []
+    const feeRecords: Array<{ student: Student; feeRecord?: FeeRecord | null; feeRecords?: FeeRecord[] }> = []
     if (month && year) {
       const monthNum = parseInt(month)
       const yearNum = parseInt(year)
@@ -92,16 +92,18 @@ export async function GET(
     } else {
       // Overall statistics
       feeRecords.forEach(record => {
-        const paidFees = record.feeRecords.filter((f: any) => f.status === 'PAID')
-        if (paidFees.length > 0) {
-          paidStudents++
-        }
-        record.feeRecords.forEach((f: any) => {
-          totalAmount += f.amount
-          if (f.status === 'PAID') {
-            collectedAmount += f.amount
+        if (record.feeRecords) {
+          const paidFees = record.feeRecords.filter((f: { status: string }) => f.status === 'PAID')
+          if (paidFees.length > 0) {
+            paidStudents++
           }
-        })
+          record.feeRecords.forEach((f: { amount: number; status: string }) => {
+            totalAmount += f.amount
+            if (f.status === 'PAID') {
+              collectedAmount += f.amount
+            }
+          })
+        }
       })
     }
     

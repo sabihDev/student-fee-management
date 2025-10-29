@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ClassLevel, CLASS_ORDER } from '@/types'
-import { Download, Calendar, FileText, Users } from 'lucide-react'
+import { Calendar, FileText, Users } from 'lucide-react'
 import ExportButton from '@/components/ui/ExportButton'
 
 export default function ReportsPage() {

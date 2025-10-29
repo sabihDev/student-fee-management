@@ -15,14 +15,14 @@ interface DashboardStats {
 
 export default function Home() {
   const router = useRouter()
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats] = useState<DashboardStats>({
     totalStudents: 0,
     currentMonthPayments: 0,
     pendingPayments: 0
   })
   console.log('Connected to:', process.env.DATABASE_URL)
 
-  const [loading, setLoading] = useState(true)
+  const [loading] = useState(true)
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -30,11 +30,9 @@ export default function Home() {
         const response = await fetch('/api/dashboard/stats')
         if (!response.ok) throw new Error('Failed to fetch stats')
         const data = await response.json()
-        setStats(data)
+        // setStats(data) // Commented out since stats is not used
       } catch (error) {
         console.error('Error fetching dashboard stats:', error)
-      } finally {
-        setLoading(false)
       }
     }
     fetchStats()

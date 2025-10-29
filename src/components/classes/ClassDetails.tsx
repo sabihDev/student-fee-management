@@ -70,8 +70,9 @@ export default function ClassDetails({
       } else {
         setError(result.error.message)
       }
-    } catch (err) {
-      setError('Failed to fetch class students')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch class students'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

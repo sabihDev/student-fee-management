@@ -74,8 +74,9 @@ export default function ExportButton({
       document.body.removeChild(a)
       window.URL.revokeObjectURL(downloadUrl)
 
-    } catch (err: any) {
-      setError(err.message || 'Export failed')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Export failed'
+      setError(errorMessage)
       setTimeout(() => setError(null), 5000) // Clear error after 5 seconds
     } finally {
       setIsExporting(false)

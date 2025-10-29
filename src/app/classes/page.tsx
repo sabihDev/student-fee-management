@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ClassLevel } from '@/types'
 import ClassOverview from '@/components/classes/ClassOverview'

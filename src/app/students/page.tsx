@@ -16,7 +16,7 @@ export default function StudentsPage() {
     console.log('Connected to:', process.env.DATABASE_URL)
 
 
-    const handleAddStudent = async (data: any) => {
+    const handleAddStudent = async (data: Record<string, unknown>) => {
         try {
             const response = await fetch('/api/students', {
                 method: 'POST',
@@ -35,12 +35,13 @@ export default function StudentsPage() {
             } else {
                 throw new Error(result.error.message)
             }
-        } catch (error: any) {
-            throw new Error(error.message || 'Failed to add student')
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to add student'
+            throw new Error(errorMessage)
         }
     }
 
-    const handleEditStudent = async (data: any) => {
+    const handleEditStudent = async (data: Record<string, unknown>) => {
         if (!selectedStudent) return
 
         try {
@@ -62,8 +63,9 @@ export default function StudentsPage() {
             } else {
                 throw new Error(result.error.message)
             }
-        } catch (error: any) {
-            throw new Error(error.message || 'Failed to update student')
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to update student'
+            throw new Error(errorMessage)
         }
     }
 
@@ -85,8 +87,9 @@ export default function StudentsPage() {
             } else {
                 throw new Error(result.error.message)
             }
-        } catch (error: any) {
-            alert(`Failed to delete student: ${error.message}`)
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+            alert(`Failed to delete student: ${errorMessage}`)
         }
     }
 

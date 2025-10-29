@@ -34,8 +34,9 @@ export default function StudentDetails({ student, onEdit, onBack }: StudentDetai
       } else {
         setError(result.error.message)
       }
-    } catch (err) {
-      setError('Failed to fetch fee records')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch fee records'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

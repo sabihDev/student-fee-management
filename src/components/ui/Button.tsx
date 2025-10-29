@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
+  function Button(
     {
       children,
       variant = 'primary',
@@ -21,7 +21,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...props
     },
     ref
-  ) => {
+  ) {
     const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors'
     const sizeStyles = {
       sm: 'px-2.5 py-1.5 text-xs',

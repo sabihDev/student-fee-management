@@ -47,12 +47,13 @@ export default function ClassDetailPage() {
       } else {
         throw new Error(result.error.message)
       }
-    } catch (error: any) {
-      alert(`Failed to delete student: ${error.message}`)
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      alert(`Failed to delete student: ${errorMessage}`)
     }
   }
 
-  const handleEditStudent = async (data: any) => {
+  const handleEditStudent = async (data: Record<string, unknown>) => {
     if (!selectedStudent) return
 
     try {
@@ -73,8 +74,9 @@ export default function ClassDetailPage() {
       } else {
         throw new Error(result.error.message)
       }
-    } catch (error: any) {
-      throw new Error(error.message || 'Failed to update student')
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update student'
+      throw new Error(errorMessage)
     }
   }
 

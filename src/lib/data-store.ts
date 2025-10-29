@@ -4,7 +4,7 @@
 import { Student, FeeRecord, ClassLevel } from '@/types'
 
 // In-memory storage
-let students: Student[] = []
+const students: Student[] = []
 let feeRecords: FeeRecord[] = []
 let nextId = 1
 

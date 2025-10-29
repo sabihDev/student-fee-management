@@ -20,7 +20,8 @@ export default function StudentCard({
 }: StudentCardProps) {
   const getFeeStatusBadge = () => {
     // Placeholder logic - in real app, check current month's fee status
-    const isPaid = Math.random() > 0.3 // 70% chance of being paid
+    // Use a deterministic approach based on student ID instead of Math.random()
+    const isPaid = student.id.charCodeAt(0) % 3 !== 0 // Deterministic based on student ID
     
     return (
       <span className={`px-2 py-1 text-xs rounded-full font-medium ${

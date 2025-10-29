@@ -102,8 +102,9 @@ export default function FeeTracker({ studentId, year = new Date().getFullYear(),
           throw new Error(result.error.message)
         }
       }
-    } catch (error: any) {
-      alert(`Failed to update fee: ${error.message}`)
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      alert(`Failed to update fee: ${errorMessage}`)
     } finally {
       setUpdatingMonth(null)
     }

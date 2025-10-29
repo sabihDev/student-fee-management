@@ -65,7 +65,7 @@ export default function StudentList({
     fetchStudents()
   }, [filters])
 
-  const handleFilterChange = (key: keyof FilterState, value: any) => {
+  const handleFilterChange = (key: keyof FilterState, value: string | ClassLevel | 'ALL') => {
     setFilters(prev => ({ ...prev, [key]: value }))
   }
 
@@ -81,8 +81,8 @@ export default function StudentList({
     const currentMonth = new Date().getMonth() + 1
     const currentYear = new Date().getFullYear()
     
-    // For now, we'll show a random status for demo purposes
-    const isPaid = Math.random() > 0.3 // 70% chance of being paid
+    // For now, we'll show a deterministic status based on student ID for demo purposes
+    const isPaid = student.id.charCodeAt(0) % 3 !== 0 // Deterministic based on student ID
     
     return (
       <span className={`px-2 py-1 text-xs rounded-full ${

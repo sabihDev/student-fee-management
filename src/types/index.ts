@@ -93,11 +93,11 @@ export interface ErrorResponse {
   error: {
     code: string
     message: string
-    details?: any
+    details?: unknown
   }
 }
 
-export interface SuccessResponse<T = any> {
+export interface SuccessResponse<T = unknown> {
   success: true
   data: T
 }

@@ -69,8 +69,9 @@ export default function ClassOverview({ onClassSelect }: ClassOverviewProps) {
       }
       
       setClassSummaries(summaries)
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch class summaries')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch class summaries'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

@@ -100,7 +100,7 @@ export default function FeeHistory({ studentId, showFilters = true }: FeeHistory
     setFilteredRecords(filtered)
   }
 
-  const handleFilterChange = (key: keyof FilterState, value: any) => {
+  const handleFilterChange = (key: keyof FilterState, value: string | number) => {
     setFilters(prev => ({ ...prev, [key]: value }))
   }
 

@@ -11,7 +11,7 @@ export async function PUT(
     
     // Validate the update data
     const allowedFields = ['amount', 'paymentDate', 'status']
-    const updateData: any = {}
+    const updateData: Record<string, unknown> = {}
     
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
@@ -20,12 +20,12 @@ export async function PUT(
     }
     
     // Convert paymentDate string to Date if provided
-    if (updateData.paymentDate) {
+    if (updateData.paymentDate && typeof updateData.paymentDate === 'string') {
       updateData.paymentDate = new Date(updateData.paymentDate)
     }
     
     // Validate status if provided
-    if (updateData.status && !['PAID', 'UNPAID'].includes(updateData.status)) {
+    if (updateData.status && typeof updateData.status === 'string' && !['PAID', 'UNPAID'].includes(updateData.status)) {
       return NextResponse.json({
         success: false,
         error: {
